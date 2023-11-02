@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea68979bf6dc70f4ba3a23fa5005b575, type: 3}
+  m_Name: Container Experience Stone
+  m_EditorClassIdentifier: 
+  _easyStone: {fileID: 6437529455072413314, guid: 734d89ce96eeedd44ab1e59293352ff0, type: 3}
+  _preMidStone: {fileID: 6612831804929497246, guid: 39780f09e522e534895101f69952fae5, type: 3}
+  _midStone: {fileID: 6304635755370660326, guid: 70bd9d5a5aaa0664d88023d3ab125cfe, type: 3}
+  _preHardStone: {fileID: 6787029948274006987, guid: 0d01dba69e8c17e47b87aaccca5a8538, type: 3}
+  _hardStone: {fileID: 7464546931420906111, guid: 8d27fdf0fedc7754c87743c891ed2bc7, type: 3}
