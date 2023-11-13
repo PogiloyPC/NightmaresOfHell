@@ -26,6 +26,8 @@ public class ButtonEnterTurretShop : GameButton
         _shopPanel = shopPanel;
     }
 
+    public void SetActive(IBuilderPanel panel) => gameObject.SetActive(panel.SetActiveButtonShop());
+
     private void EnterShopTurret()
     {
         _builderPanel.UndisplayPanel();

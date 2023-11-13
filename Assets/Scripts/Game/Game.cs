@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using System;
 using EnemyInterface;
 using BulletInterface;
@@ -18,13 +17,14 @@ public class Game : MonoBehaviour, ITimeGame
 
     [SerializeField] private EffectBuild _particleBuild;
 
-    [SerializeField] private ExtensionForTurret _extension;  
+    [SerializeField] private ExtensionForTurret _extension;
 
     private Action<PlaceForTurret> _onDisplayPanel;
     private Action<IRewardMoneyEnemy> _onTakeRewardMoney;
     private Action<IRewardExperienceEnemy> _onTakeRewardExperience;
     private Action<IPlayerWallet> _onDisplayCountMoney;
     private Action<IPropertyHealthToward> _onDisplayHealthToward;
+    private Action<IUpgradableTurret, IUpgraderTurret> _onDisplayPanelUpgradeTurret;
 
     private static FactoryEnemy _factoryEnemy;
     private static FactoryBullet _factoryBullet;
@@ -36,16 +36,16 @@ public class Game : MonoBehaviour, ITimeGame
     private BuilderTurret<Turret> _builderTurret;
 
     private PlayerWallet _playerWallet;
-    private PlayerLevel _playerLevel;   
-    
+    private PlayerLevel _playerLevel;
+
+    [SerializeField] private TurretUpgradeController _turretUpgradeController;
+
     private Ray _ray => _camera.ScreenPointToRay(Input.mousePosition);
 
     [SerializeField] private int _startMoney;
 
     [SerializeField] private float _experienceForUpLevel;
     private float _timeGame;
-
-    private bool _active;
 
     private void OnEnable()
     {
@@ -63,6 +63,8 @@ public class Game : MonoBehaviour, ITimeGame
 
     private void Start()
     {
+        IPanelTurretUpgrade panelTurretUpgrade = null;
+
         Action<float, IDamageDillerEnemy, IEnemy> onTakeDamage;
 
         _playerWallet = new PlayerWallet(_onDisplayCountMoney, _startMoney);
@@ -77,24 +79,22 @@ public class Game : MonoBehaviour, ITimeGame
         _createrExtension = new CreaterExtension(_extension, _particleBuild, _playerWallet);
         _builderTurret = new BuilderTurret<Turret>(_particleBuild);
 
-        _gameUI.InitGameUI(out _onDisplayPanel, out _onDisplayHealthToward, out onTakeDamage,
-            _builderTurret, _createrExtension, _playerWallet, _toward, _playerLevel);
+        _gameUI.InitAction(out _onDisplayPanel, out _onDisplayHealthToward, out onTakeDamage, out _onDisplayPanelUpgradeTurret,
+            out panelTurretUpgrade);
+        _gameUI.InitButton(_builderTurret, _createrExtension, _playerWallet, _toward);
+        _gameUI.InitPanel(_playerLevel);
 
         _toward.InitToward(_onDisplayHealthToward);
 
-        _enemySpawner.InitCreater(_toward, onTakeDamage, this);        
+        _enemySpawner.InitCreater(_toward, onTakeDamage, this);
+
+        _turretUpgradeController.InitUpgradeView(panelTurretUpgrade);
 
         _gameUI.DisplayCountMoney(_playerWallet);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
-            _active = !_active;
-
-        if (_active)
-            return;
-
         _timeGame += Time.deltaTime;
 
         _gameUI.SetCurrentTimeGame(this);
@@ -105,52 +105,69 @@ public class Game : MonoBehaviour, ITimeGame
         _factoryExperienceStone.GameUpdate();
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            CreateBuild();
+            ShootRaycastHit();
     }
 
     private void FixedUpdate()
     {
-        if (_active)
-            return;
-
-        _factoryEnemy.GameUpdate();        
+        _factoryEnemy.GameUpdate();
     }
 
-    private void TakeReward(IRewardMoneyEnemy rewardMoney)
-    {
-        _playerWallet.FillUpMoney(rewardMoney);        
-    }
-    
-    private void TakeReward(IRewardExperienceEnemy rewardExperience)
-    {        
-        _playerLevel.TakeExperience(rewardExperience);
-    }
+    private void TakeReward(IRewardMoneyEnemy rewardMoney) => _playerWallet.FillUpMoney(rewardMoney);
+
+    private void TakeReward(IRewardExperienceEnemy rewardExperience) => _playerLevel.TakeExperience(rewardExperience);
 
     public float GetCurrentTimeGame() => _timeGame;
 
-    private void CreateBuild()
+    private void ShootRaycastHit()
     {
         RaycastHit hit;
 
         if (Physics.Raycast(_ray, out hit) && !_gameUI.GetLockTochScreen())
         {
-            TowardForTurret place = hit.collider.gameObject.GetComponent<TowardForTurret>();
+            IGameContent gameContent = hit.collider.gameObject.GetComponent<IGameContent>();
 
-            ExtensionForTurret place2 = hit.collider.gameObject.GetComponent<ExtensionForTurret>();            
-
-            if (place != null)
+            switch (gameContent.GetTypeGameContent())
             {
-                _builderTurret.SetPlaceForTurret(place);
+                case (TypeGameContent.placeForTurret):
+                    PlaceForTurret place = (PlaceForTurret)gameContent;
 
-                _createrExtension.SetTowardForExtension(place);
+                    HitPlaceForTurret(place);
+                    break;
+                case (TypeGameContent.turret):
+                    Turret turret = (Turret)gameContent;
 
-                _onDisplayPanel?.Invoke(place);
+                    HitTurret(turret);
+                    break;
             }
-            else if (place2 != null)
-            {
-                _builderTurret.SetPlaceForTurret(place2);
+        }
+    }
 
-                _onDisplayPanel?.Invoke(place2);
+    private void HitPlaceForTurret(PlaceForTurret place)
+    {
+        if (place != null)
+        {
+            _builderTurret.SetPlaceForTurret(place);
+
+            _onDisplayPanel?.Invoke(place);
+
+            if (place is TowardForTurret toward)
+                _createrExtension.SetTowardForExtension(toward);
+        }
+    }
+
+    private void HitTurret(Turret turret)
+    {
+        IUpgraderTurret[] upgraders = _turretUpgradeController.GetAllUpgradersTurret();
+
+        for (int i = 0; i < upgraders.Length; i++)
+        {
+            if (turret.GetNameTurret() == upgraders[i].GetTurretNameUpgrader() &&
+                turret.GetCurrentLevelTurret() != LevelTurret.maxLevel)
+            {                
+                upgraders[i].SetTurretForUpgrade(turret);
+
+                _onDisplayPanelUpgradeTurret.Invoke(turret, upgraders[i]);
             }
         }
     }
@@ -162,11 +179,11 @@ public class Game : MonoBehaviour, ITimeGame
         instance.Init(_factoryBullet);
 
         return instance;
-    }    
+    }
 
     public static T SpawnTurret<T>(T turret) where T : Turret
     {
-        T instance = (T)_factoryTurret.GetInstance(turret);        
+        T instance = (T)_factoryTurret.GetInstance(turret);
 
         instance.Init(_factoryTurret);
 
@@ -180,8 +197,8 @@ public class Game : MonoBehaviour, ITimeGame
         instance.Init(_factoryEffect);
 
         return instance;
-    }  
-    
+    }
+
     public static T SpawnEnemy<T>(T enemy) where T : Enemy
     {
         T instance = (T)_factoryEnemy.GetInstance(enemy);
@@ -189,8 +206,8 @@ public class Game : MonoBehaviour, ITimeGame
         instance.Init(_factoryEnemy, _factoryEnemy);
 
         return instance;
-    }   
-    
+    }
+
     public static T SpawnExperienceStone<T>(IEnemy enemy) where T : ExperienceStone
     {
         T instance = (T)_factoryExperienceStone.GetInstance(enemy);

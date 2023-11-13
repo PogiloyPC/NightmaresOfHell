@@ -11,7 +11,7 @@ public class ChainBullet : StraightBullet
 
     protected override void GiveDamage(IEnemy enemy)
     {
-        enemy.GetDamage(this);
+        enemy.TakeDamage(this);
 
         _strenghtBullet--;
 

@@ -21,20 +21,12 @@ public class ButtonValume : GameButton
         _lockedImage = lockedImage;
         _unlockedImage = unlockedImage;
 
-         int locked = PlayerPrefs.GetInt("lockedVolume");
-       
-        if (locked == 1)
-        {
-            _lockedVolume = true;
-            _audioMixer.audioMixer.SetFloat("MasterValume", _minVolume);
-        }
-        else
-        {
-            _lockedVolume = false;
-            _audioMixer.audioMixer.SetFloat("MasterValume", _maxVolume);
-        }
+        int locked = PlayerPrefs.GetInt("lockedVolume");
 
-        ChangedVolumeGame();
+        if (locked == 1)
+            StartButton(_lockedImage, true, _minVolume);
+        else
+            StartButton(_unlockedImage, false, _maxVolume);
     }
 
     protected override void OnEnable()
@@ -51,6 +43,15 @@ public class ButtonValume : GameButton
         _onClick -= ChangedVolumeGame;
     }
 
+    private void StartButton(Sprite imageButton, bool lockedValume, float volume)
+    {
+        sprite = imageButton;
+
+        _lockedVolume = lockedValume;
+
+        _audioMixer.audioMixer.SetFloat("MasterValume", volume);
+    }
+
     private void ChangedVolumeGame()
     {
         _lockedVolume = !_lockedVolume;
@@ -61,18 +62,18 @@ public class ButtonValume : GameButton
         {
             valume = _minVolume;
 
-            sprite = _lockedImage;                       
+            sprite = _lockedImage;
         }
         else
         {
             valume = _maxVolume;
-            
-            sprite = _unlockedImage;            
+
+            sprite = _unlockedImage;
         }
 
         _audioMixer.audioMixer.SetFloat("MasterValume", valume);
 
-        PlayerPrefs.SetInt("lockedVolume", _lockedVolume ? 1 : 0);        
+        PlayerPrefs.SetInt("lockedVolume", _lockedVolume ? 1 : 0);
     }
 }
 

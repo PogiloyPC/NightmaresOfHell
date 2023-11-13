@@ -2,41 +2,46 @@ using BulletInterface;
 using EnemyInterface;
 using UnityEngine;
 
-public abstract class Turret : GameMono, ILoaderBullet
+public abstract class Turret : GameMono, IGameContent, IUpgradableTurret
 {
     [SerializeField] private Point _shotPosition;
+    [SerializeField] private Point _headTurret;
+
+    [SerializeField] private Animator _anim;
+
+    public TurretStats TurretStats { get; private set; }
 
     public IEnemy _enemy { get; private set; }
 
     private IFactoryReclaim<Turret> _factory;
 
+    [SerializeField] private TypeGameContent _typeGameContent = TypeGameContent.turret;
+
+    [SerializeField] private NameTurret _nameTurret;
+
     [SerializeField] private LayerMask _enemyMask;
-
-
-    [SerializeField] private TypeDamageBullet _typeDamageBullet;
     public Vector3 ShotPosition => _shotPosition.GetPosition();
 
-    [SerializeField] private float _attackSpeed;
     [SerializeField] private float _distanceSearchEnemy;
     private float _progresShot;
-    
-    [SerializeField] private float _damage;
-
+    private float _timeShot;
 
     public float DistanceSearchEnemy { get { return _distanceSearchEnemy; } private set { } }
 
-    public float GetLaunchDamage() => _damage;
+    public TypeGameContent GetTypeGameContent() => _typeGameContent;
 
-    public TypeDamageBullet GetLaunchTypeDamage() => _typeDamageBullet;
+    public void Init(IFactoryReclaim<Turret> factory) => _factory = factory;
 
-    public void Init(IFactoryReclaim<Turret> factory)
+    public void InitTurretStats(TurretStats turretStats)
     {
-        _factory = factory;
+        TurretStats = turretStats;
+
+        _timeShot = 60f / TurretStats.ShotsPerMinute;
     }
 
-    public void InitTurret(ICreaterBuild positionSpawn)
-    {        
-        transform.position = positionSpawn.GetCurrentPositionBuild();
+    public void InitTurret(ILounchPosition positionSpawn)
+    {
+        transform.position = positionSpawn.GetLounchPosition();
         transform.rotation = Quaternion.identity;
     }
 
@@ -44,38 +49,58 @@ public abstract class Turret : GameMono, ILoaderBullet
     {
         SearchEnemy();
 
-        _progresShot += Time.deltaTime * _attackSpeed;
+        _progresShot += Time.deltaTime;
 
         if (_enemy == null)
             return;
 
         LookEnemy();
 
-        if (_progresShot >= 1f)
+        if (_progresShot >= _timeShot)
         {
             Shot();
             _progresShot -= _progresShot;
         }
     }
 
-    protected void LookEnemy() => _shotPosition.LooakAt(_enemy.GetPosition());
+    private void LookEnemy()
+    {
+        Vector3 directionRotate = _enemy.GetPosition() - _headTurret.GetPosition();
+        directionRotate.y = 0;
 
-    protected abstract void Shot();    
+        _headTurret.LookTarget(directionRotate);
+    }
+
+    protected virtual void RotateGun()
+    {
+
+    }
+
+    protected abstract void Shot();
 
     protected void SearchEnemy()
     {
         Collider[] coll = Physics.OverlapSphere(transform.position, _distanceSearchEnemy, _enemyMask);
 
+        float distance = 0f;
+        float distanceNearyEnemy = float.MaxValue;
+
+
         if (coll.Length >= 1)
         {
+
             for (int i = 0; i < coll.Length; i++)
             {
                 IEnemy enemy = coll[i].gameObject.GetComponent<IEnemy>();
 
-                if (enemy != null)
+                distance = Vector3.Distance(enemy.GetPosition(), transform.position);
+
+                if (distance <= distanceNearyEnemy)
+                {
                     _enemy = enemy;
-                else
-                    _enemy = null;
+
+                    distanceNearyEnemy = distance;
+                }
             }
         }
         else
@@ -83,6 +108,14 @@ public abstract class Turret : GameMono, ILoaderBullet
             _enemy = null;
         }
     }
+
+    public Vector3 GetPosition() => transform.position;
+
+    public void ReloadTurret() => _factory.Reclaim(this);
+
+    public NameTurret GetNameTurret() => _nameTurret;
+
+    public LevelTurret GetCurrentLevelTurret() => TurretStats.Level;
 
     private void OnDrawGizmos()
     {

@@ -3,11 +3,13 @@ using BulletInterface;
 using EnemyInterface;
 using UnityEngine;
 
-public abstract class Bullet : GameMono, IDamageDillerEnemy
+public abstract class Bullet : GameMono, IDamageDillerEnemy, IGameContent
 {
     protected IFactoryReclaim<Bullet> _factoryBullet { get; private set; }
 
     private TypeDamageBullet _typeDamage;
+
+    [SerializeField] private TypeGameContent _typeGameContent = TypeGameContent.bullet;
 
     protected Vector3 _enemyTarget;
 
@@ -15,6 +17,8 @@ public abstract class Bullet : GameMono, IDamageDillerEnemy
 
     [SerializeField] private float _lifeTimeBullet = 7f;
     public float LifeTimeBullet { get { return _lifeTimeBullet; } private set { } }
+
+    public TypeGameContent GetTypeGameContent() => _typeGameContent;
 
     public float GetDamageBullet() => _damage;
 

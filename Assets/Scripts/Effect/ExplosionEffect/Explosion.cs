@@ -71,7 +71,7 @@ public class Explosion : Effect, IDamageDillerEnemy
 
             if (enemy != null)
             {
-                enemy.GetDamage(this);
+                enemy.TakeDamage(this);
             }
         }
     }

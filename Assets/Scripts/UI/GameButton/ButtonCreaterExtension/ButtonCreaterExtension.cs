@@ -19,6 +19,8 @@ public class ButtonCreaterExtension : GameButton
         _onClick -= StartCreateExtension;
     }
 
+    public void SetActive(IBuilderPanel builderPanel) => gameObject.SetActive(builderPanel.SetActiveButtonCreatre());
+
     public void Init(BuilderPanel builderPanel, ICreaterExtension creater)
     {
         _builderPanel = builderPanel;

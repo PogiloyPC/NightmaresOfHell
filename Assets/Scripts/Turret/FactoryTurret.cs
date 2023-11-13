@@ -56,7 +56,7 @@ public class CreaterExtension : ICreaterExtension, IPurchasable
         }
     }
 
-    public Vector3 GetCurrentPositionBuild()
+    public Vector3 GetLounchPosition()
     {
         if (_toward)
             return _toward.GetPositionForTurret();

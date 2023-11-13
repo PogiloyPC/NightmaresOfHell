@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class ButtonLevelUpToward : GameButton, IPurchasable, ISeterPrice
-{   
+{
     private PriceUI _priceLevelUpUI;
 
     private IPlayerWallet _playerWallet;
@@ -35,6 +35,9 @@ public class ButtonLevelUpToward : GameButton, IPurchasable, ISeterPrice
         _toward = toward;
 
         _priceLevelUpUI.InitPrice(this);
+
+        if (_toward.GetMaxLevel())
+            gameObject.SetActive(false);
     }
 
     private void OnClickButton()
@@ -45,7 +48,7 @@ public class ButtonLevelUpToward : GameButton, IPurchasable, ISeterPrice
 
             _toward.LevelUp();
 
-            _priceLevelUpToward *= 3; 
+            _priceLevelUpToward *= 3;
 
             _priceLevelUpUI.InitPrice(this);
         }

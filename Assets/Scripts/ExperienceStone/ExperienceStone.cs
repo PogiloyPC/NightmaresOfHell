@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using EnemyInterface;
 
-public class ExperienceStone : GameMono, IRewardExperienceEnemy
+public class ExperienceStone : GameMono, IRewardExperienceEnemy, IGameContent
 {
+    [SerializeField] private TypeGameContent _typeGameContent;
+
     private IFactoryReclaim<ExperienceStone> _factory;
 
     private IToward _toward;
@@ -24,6 +26,7 @@ public class ExperienceStone : GameMono, IRewardExperienceEnemy
     public void InitStone(IEnemy enemy, IRewardExperienceEnemy reward, IToward toward)
     {
         _toward = toward;
+        float hight = 10f;
 
         transform.position = enemy.GetPosition();
         transform.LookAt(toward.GetPosition());
@@ -33,11 +36,13 @@ public class ExperienceStone : GameMono, IRewardExperienceEnemy
         _flightTime = x / _speed;
 
         _t = transform.position;
-        _t1 = new Vector3(transform.position.x + (x / 4), 10f, transform.position.z) + transform.forward;
-        _t2 = new Vector3(transform.position.x + ((x * 3) / 4), 10f, transform.position.z) + transform.forward;
+        _t1 = new Vector3(transform.position.x + (x / 4), hight, transform.position.z) + transform.forward;
+        _t2 = new Vector3(transform.position.x + ((x * 3) / 4), hight, transform.position.z) + transform.forward;
 
         rewardExperience = reward.GetRewardExperienceEnemy();
     }
+
+    public TypeGameContent GetTypeGameContent() => _typeGameContent;
 
     public override void GameUpdate()
     {

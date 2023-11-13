@@ -38,7 +38,7 @@ public class BallisticTurret : Turret
 
         BallisticBullet bullet = Game.SpawnBullet(_bulletPrefab);
         bullet.InitBullet(launchPoint, targetPoint, new Vector3(s * cosTheta * dir.x, s * sinTheta, s * cosTheta * dir.y));
-        bullet.InitDamageDiller(this);
+        bullet.InitDamageDiller(this.TurretStats);
     }
 }
 

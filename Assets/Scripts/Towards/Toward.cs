@@ -15,7 +15,7 @@ public class Toward : MonoBehaviour, IToward, IHealthToward, IPropertyHealthTowa
     [SerializeField] private float _startHealth;
     private float _currentHealth;
 
-    [SerializeField] private int _maxLevelToward;
+    private int _maxLevelToward => _circleWallsToward.Length;
     public int Level { get; private set; } = 1;
 
     public Vector3 GetPosition() => transform.position;
@@ -26,7 +26,7 @@ public class Toward : MonoBehaviour, IToward, IHealthToward, IPropertyHealthTowa
     {
         _onDisplayHealth = onDisplayHealth;
 
-        _currentHealth = _startHealth;
+        _currentHealth = _startHealth;       
 
         foreach (CircleWallToward wallToward in _circleWallsToward)
             wallToward.InitWall(this);
@@ -48,10 +48,10 @@ public class Toward : MonoBehaviour, IToward, IHealthToward, IPropertyHealthTowa
 
     public bool GetMaxLevel()
     {
-        if (Level < _maxLevelToward)
-            return false;
-        else
+        if (Level == _maxLevelToward)
             return true;
+        else
+            return false;
     }
 
     public void LevelUp()

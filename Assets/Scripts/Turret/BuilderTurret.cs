@@ -21,18 +21,24 @@ public class BuilderTurret<T> : IBuilderTurret<T> where T : Turret
         if (_placeForTurret == null)
             return false;
 
-        Game.SpawnTurret(turretShop).InitTurret(this);       
+        ConfigTurretStats config = StatsConfigData.GetConfigStats(turretShop.GetNameTurret());
+
+        TurretStats turretStats = config.GetLaunchStatsTurret();
+
+        Turret turret = Game.SpawnTurret(turretShop);
+        turret.InitTurret(this);
+        turret.InitTurretStats(turretStats);
 
         EffectBuild effect = Game.SpawnEffect(_particleBuild);
-
         effect.PlayBuild(this);
 
+        _placeForTurret.SetTurret();
         _placeForTurret = null;
 
         return true;
     }
 
-    public Vector3 GetCurrentPositionBuild()
+    public Vector3 GetLounchPosition()
     {
         if (_placeForTurret)
             return _placeForTurret.GetPositionForTurret();

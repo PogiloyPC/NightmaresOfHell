@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751292d74ea1b694695325ae4b87841d, type: 3}
+  m_Name: Upgrader Turret
+  m_EditorClassIdentifier: 
+  _firstLevelUpTurret: {fileID: 7934561761031966976, guid: d989b8c27437e8f40879b2005d5ba334, type: 3}
+  _secondLevelUpTurret: {fileID: 2571937436233805170, guid: 033cb7ca2f962604c8cab6cbf25951e2, type: 3}
+  _thirdLevelUpTurret: {fileID: 3953804316485418318, guid: c88278bae42cb404cba14803856a0030, type: 3}
+  _fourthLevelUpTurret: {fileID: 8437673968726832890, guid: 9dd04ebfa48ed744eb0619ff562691e5, type: 3}
+  _nameTurretUpgrade: 0
+  _imagesTurret:
+    _firstLevelImageTurret: {fileID: 21300000, guid: 0e80bd0b4a8196f46acf73711b9505ec, type: 3}
+    _secondLevelImageTurret: {fileID: 21300000, guid: 0f061b4bd0275bc4eb60f2af31e7375a, type: 3}
+    _thirdLevelImageTurret: {fileID: 21300000, guid: 999d04c0ea94ccc41b3d80788160695b, type: 3}
+    _fourthLevelImageTurret: {fileID: 21300000, guid: afe7d261eb308984e95ffa8d883fc998, type: 3}
+    _fifthLevelImageTurret: {fileID: 21300000, guid: 360cfd7debcd44adfbb69d1911de502d, type: 3}
+  _pricesTurret:
+    _firstLevelPrice: 75
+    _secondLevelPrice: 150
+    _thirdLevelPrice: 225
+    _fourthLevelPrice: 300

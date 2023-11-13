@@ -10,9 +10,9 @@ public class EffectBuild : ParticleEffect
             _factory.Reclaim(this);
     }
 
-    public void PlayBuild(ICreaterBuild creater)
+    public void PlayBuild(ILounchPosition creater)
     {
-        transform.position = creater.GetCurrentPositionBuild();
+        transform.position = creater.GetLounchPosition();
 
         InitTimeEffect();
 

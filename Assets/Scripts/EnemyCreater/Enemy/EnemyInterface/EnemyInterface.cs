@@ -23,7 +23,7 @@ namespace EnemyInterface
     {
         Vector3 GetPosition();
 
-        void GetDamage(IDamageDillerEnemy bullet);
+        void TakeDamage(IDamageDillerEnemy bullet);
 
         Enemy GetNextEnemy();
 

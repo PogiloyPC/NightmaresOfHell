@@ -7,8 +7,8 @@ public class Point : MonoBehaviour
     public Vector3 GetPosition() => transform.position;
     public Vector3 GetSize() => transform.localScale;
 
-    public void LooakAt(Vector3 positionObject)
-    {
-        transform.LookAt(positionObject);
+    public void LookTarget(Vector3 positionObject)
+    {        
+        transform.rotation = Quaternion.LookRotation(positionObject);
     }
 }

@@ -3,12 +3,12 @@ using UnityEngine;
 using System;
 using BulletInterface;
 
-public class Enemy : GameMono, IEnemy, IRewardMoneyEnemy, IRewardExperienceEnemy, IDamageDiller
+public class Enemy : GameMono, IEnemy, IRewardMoneyEnemy, IRewardExperienceEnemy, IDamageDiller, IGameContent
 {
-    private Enemy _nextEnemy;
-
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private Point _positionEnemy;
+
+    [SerializeField] private TypeGameContent _typeGameContent = TypeGameContent.enemy;
 
     private Action<float, IDamageDillerEnemy, IEnemy> _onTakeDamage;
 
@@ -54,8 +54,10 @@ public class Enemy : GameMono, IEnemy, IRewardMoneyEnemy, IRewardExperienceEnemy
     {
         _movable.Move();
     }
+   
+    public TypeGameContent GetTypeGameContent() => _typeGameContent;
 
-    public void GetDamage(IDamageDillerEnemy bullet)
+    public void TakeDamage(IDamageDillerEnemy bullet)
     {
         float damage = 0f;
 
