@@ -23,9 +23,9 @@ public class ViwerDamageTurret : Effect
 
         _countDamage.text = damage.ToString();
 
-        if (bullet.GetTypeDamage() == TypeDamageBullet.magicDamage)
+        if (bullet.GetTypeDamage() == TypeDamage.magicDamage)
             _countDamage.color = Color.green;
-        else if (bullet.GetTypeDamage() == TypeDamageBullet.physicalDamage)
+        else if (bullet.GetTypeDamage() == TypeDamage.physicalDamage)
             _countDamage.color = Color.yellow;
 
         _startPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);

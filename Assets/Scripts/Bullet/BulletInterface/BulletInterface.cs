@@ -7,17 +7,17 @@ namespace BulletInterface
     {
         public float GetDamageBullet();
 
-        public TypeDamageBullet GetTypeDamage();
+        public TypeDamage GetTypeDamage();
     }
 
     public interface ILoaderBullet
     {
         public float GetLaunchDamage();
 
-        public TypeDamageBullet GetLaunchTypeDamage();
+        public TypeDamage GetLaunchTypeDamage();
     }
 
-    public enum TypeDamageBullet
+    public enum TypeDamage
     {
         magicDamage,
         physicalDamage

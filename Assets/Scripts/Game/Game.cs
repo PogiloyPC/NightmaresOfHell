@@ -11,13 +11,15 @@ public class Game : MonoBehaviour, ITimeGame
 
     [SerializeField] private ContainerExperienceStone _containerExpStone;
 
-    [SerializeField] private EnemySpawner _enemySpawner;
+    [SerializeField] private EnemyHandler _enemySpawner;
 
     [SerializeField] private GameUI _gameUI;
 
     [SerializeField] private EffectBuild _particleBuild;
 
     [SerializeField] private ExtensionForTurret _extension;
+
+    public static CurrentTimeMinute CurrentTimeGame { get; private set; }
 
     private Action<PlaceForTurret> _onDisplayPanel;
     private Action<IRewardMoneyEnemy> _onTakeRewardMoney;
@@ -97,6 +99,8 @@ public class Game : MonoBehaviour, ITimeGame
     {
         _timeGame += Time.deltaTime;
 
+        CheckCurrentMinute();
+
         _gameUI.SetCurrentTimeGame(this);
 
         _factoryBullet.GameUpdate();
@@ -111,6 +115,14 @@ public class Game : MonoBehaviour, ITimeGame
     private void FixedUpdate()
     {
         _factoryEnemy.GameUpdate();
+    }
+
+    private void CheckCurrentMinute()
+    {
+        int secondInMinute = 60;
+
+        if (Mathf.CeilToInt(_timeGame) == ((int)CurrentTimeGame + 1) * secondInMinute)
+            CurrentTimeGame = CurrentTimeGame + 1;
     }
 
     private void TakeReward(IRewardMoneyEnemy rewardMoney) => _playerWallet.FillUpMoney(rewardMoney);
@@ -164,7 +176,7 @@ public class Game : MonoBehaviour, ITimeGame
         {
             if (turret.GetNameTurret() == upgraders[i].GetTurretNameUpgrader() &&
                 turret.GetCurrentLevelTurret() != LevelTurret.maxLevel)
-            {                
+            {
                 upgraders[i].SetTurretForUpgrade(turret);
 
                 _onDisplayPanelUpgradeTurret.Invoke(turret, upgraders[i]);

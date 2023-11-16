@@ -27,7 +27,7 @@ public class Enemy : GameMono, IEnemy, IRewardMoneyEnemy, IRewardExperienceEnemy
     [SerializeField] private float _health;
     [SerializeField] private float _procentArmor;
     [SerializeField] private float _damage;
-    [SerializeField] private float _rewardEnemyExperience;
+    [SerializeField] private float _rewardEnemyExperience;    
 
     [SerializeField] private int _rewardEnemyMoney;
 
@@ -67,13 +67,13 @@ public class Enemy : GameMono, IEnemy, IRewardMoneyEnemy, IRewardExperienceEnemy
                 damage = bullet.GetDamageBullet();
                 break;
             case (TypeArmor.magicArmor):
-                if (bullet.GetTypeDamage() == TypeDamageBullet.magicDamage)
+                if (bullet.GetTypeDamage() == TypeDamage.magicDamage)
                     damage = CalculateDamage(bullet);
                 else
                     damage = bullet.GetDamageBullet();
                 break;
             case (TypeArmor.physicalArmor):
-                if (bullet.GetTypeDamage() == TypeDamageBullet.physicalDamage)
+                if (bullet.GetTypeDamage() == TypeDamage.physicalDamage)
                     damage = CalculateDamage(bullet);
                 else
                     damage = bullet.GetDamageBullet();

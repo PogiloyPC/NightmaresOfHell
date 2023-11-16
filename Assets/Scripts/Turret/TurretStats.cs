@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class TurretStats : ILoaderBullet
 {
-    [SerializeField] private TypeDamageBullet _typeDamageBullet;
+    [SerializeField] private TypeDamage _typeDamageBullet;
 
     [SerializeField] private LevelTurret _levelTurret;
     public LevelTurret Level { get { return _levelTurret; } private set { } }
@@ -15,6 +15,6 @@ public class TurretStats : ILoaderBullet
 
     public float GetLaunchDamage() => _damage;
 
-    public TypeDamageBullet GetLaunchTypeDamage() => _typeDamageBullet;
+    public TypeDamage GetLaunchTypeDamage() => _typeDamageBullet;
 }
 

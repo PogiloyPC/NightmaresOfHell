@@ -8448,7 +8448,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
@@ -11287,16 +11287,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724690526}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72d5d2efe7a33ee4783da83795875c35, type: 3}
+  m_Script: {fileID: 11500000, guid: 078d6f880968dc548badfe5de872f7ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waveMonsters: {fileID: 11400000, guid: d0bd7fc44b9b8684a8250096a5c6c4fc, type: 2}
+  _spawnerEnemies:
+  - {fileID: 11400000, guid: f56e2616aad3fa04a813a152fa2cfc9e, type: 2}
+  - {fileID: 11400000, guid: fddc7a9bddfbc3f4d99ce225ba40e0e5, type: 2}
+  - {fileID: 11400000, guid: 2fff1198e69ac624691764fc0cd14db5, type: 2}
   _fieldSpawn:
   - {fileID: 597082129}
   - {fileID: 2139474967}
   - {fileID: 1524301206}
   - {fileID: 80769800}
-  _speedSpawn: 2.5
 --- !u!4 &1724690528
 Transform:
   m_ObjectHideFlags: 0

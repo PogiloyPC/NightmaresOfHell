@@ -7,7 +7,7 @@ public abstract class Bullet : GameMono, IDamageDillerEnemy, IGameContent
 {
     protected IFactoryReclaim<Bullet> _factoryBullet { get; private set; }
 
-    private TypeDamageBullet _typeDamage;
+    private TypeDamage _typeDamage;
 
     [SerializeField] private TypeGameContent _typeGameContent = TypeGameContent.bullet;
 
@@ -22,7 +22,7 @@ public abstract class Bullet : GameMono, IDamageDillerEnemy, IGameContent
 
     public float GetDamageBullet() => _damage;
 
-    public TypeDamageBullet GetTypeDamage() => _typeDamage;
+    public TypeDamage GetTypeDamage() => _typeDamage;
 
     public void Init(IFactoryReclaim<Bullet> factory) => _factoryBullet = factory;
 

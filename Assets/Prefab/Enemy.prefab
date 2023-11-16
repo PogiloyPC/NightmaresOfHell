@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 90371083c4d738c46ad4ecb64d181fcf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 3426491029852922304}
   _positionEnemy: {fileID: 6183726279387993052}
+  _typeGameContent: 3
   _typeArmor: 2
   _typeExperience: 0
   _speed: 3

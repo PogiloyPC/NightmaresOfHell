@@ -12,7 +12,7 @@ public class Explosion : Effect, IDamageDillerEnemy
 
     private LayerMask _enemyMask;
 
-    private TypeDamageBullet _typeDamage;
+    private TypeDamage _typeDamage;
 
     private float _damage;
     private float _timeAnimation;
@@ -24,7 +24,7 @@ public class Explosion : Effect, IDamageDillerEnemy
 
     public float GetDamageBullet() => _damage;
 
-    public TypeDamageBullet GetTypeDamage() => _typeDamage;
+    public TypeDamage GetTypeDamage() => _typeDamage;
 
     public void InitExplosion(IDamageDillerEnemy bullet, Vector3 positionExplosion, float radiusExplosion, LayerMask enemyMask)
     {
